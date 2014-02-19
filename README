@@ -1,0 +1,13 @@
+Constant duration SIR model code accompanying "Model versions and fast algorithms for network epidemiology". This code represents the three different algorithms discussed in the paper. sir_dur is the canonical algorithm, sir_dur2 is the no-state-label algorithm and sir_dur3 is the incomplete-SI-link-list version.
+
+The code can be compiled by the make command. For linux systems one need to load the library alloc.h and allocate the array of random numbers by memalign rather than malloc (for OSX). The lines for linux are commented out.
+
+The random number generator (RNG) is initialized by reading its state in the (hidden) .state folder. The name of the RNG state file is the first argument to the program. Before exiting, the state file is overwritten by the current state of the RNG. The idea for this procedure is to avoid the need of spinning up the RNG to escape the initial low-entropy state, but probably this affects the results very little, compared to the more common approach of feeding the RNG an integer seed.
+
+The second argument is the network file. This has to be a text file with two white-space separated columns, each row representing an edge. The node indices have to be numbers between 0 and N - 1. The network reading routine does not have any sanity checks so funny things will happen if the specifications are not followed. The program also assumes the network is a simple graph (i.e. without and multiple- or self-edges).
+
+The third and fourth arguments specify the model parameters delta and lambda respectively. The number of iterations is specified in the header file.
+
+For example you could (after compiling) run the first (canonical) SIR algorithm as:
+
+./sir_dur .state/0 nwk/test 0.2 3
